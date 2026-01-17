@@ -1,0 +1,5 @@
+{
+  "name": "GDG Monday Motivation Generator",
+  "description": "A high-fidelity graphic generator for Google Developer Groups Monday Motivation posts. Enter your chapter details and quote, and download a ready-to-post image.",
+  "requestFramePermissions": []
+}
