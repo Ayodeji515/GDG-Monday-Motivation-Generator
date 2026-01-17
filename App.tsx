@@ -1,9 +1,9 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import GraphicTemplate from './components/GraphicTemplate.tsx';
 import { GraphicDetails, DEFAULT_DETAILS } from './types.ts';
 import * as htmlToImage from 'html-to-image';
-import { Download, RefreshCw, Sparkles, Layout, Type, MapPin, AtSign } from 'lucide-react';
+import { Download, RefreshCw, Sparkles, Layout, Type, MapPin, AtSign, Lock } from 'lucide-react';
 
 const App: React.FC = () => {
   const [details, setDetails] = useState<GraphicDetails>(DEFAULT_DETAILS);
@@ -11,6 +11,8 @@ const App: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    // Only allow changes to the quote field if we wanted strict locking, 
+    // but the request implies locking specific fields.
     setDetails(prev => ({ ...prev, [name]: value }));
   };
 
@@ -60,7 +62,7 @@ const App: React.FC = () => {
             className="text-slate-500 hover:text-blue-600 flex items-center gap-2 text-sm font-medium transition-colors"
           >
             <RefreshCw size={16} />
-            Reset to Defaults
+            Reset Quote
           </button>
         </div>
       </header>
@@ -69,40 +71,43 @@ const App: React.FC = () => {
         <section className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-6 lg:p-8 space-y-6 border border-slate-100">
           <div className="space-y-1">
             <h2 className="text-2xl font-bold text-slate-900">Customizer</h2>
-            <p className="text-slate-500">Tailor the Monday Motivation graphic for your chapter.</p>
+            <p className="text-slate-500">Update the weekly motivation text.</p>
           </div>
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {/* Read-Only Chapter Name */}
                <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <MapPin size={16} className="text-blue-500" />
-                  Chapter Name
+                <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-blue-500" /> Chapter Name</span>
+                  <Lock size={14} className="text-slate-400" />
                 </label>
                 <input
                   type="text"
                   name="chapterName"
                   value={details.chapterName}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  readOnly
+                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
                 />
               </div>
 
+              {/* Read-Only Context Text */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <Layout size={16} className="text-green-500" />
-                  Context Text
+                <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
+                  <span className="flex items-center gap-2"><Layout size={16} className="text-green-500" /> Context Text</span>
+                  <Lock size={14} className="text-slate-400" />
                 </label>
                 <input
                   type="text"
                   name="subText"
                   value={details.subText}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  readOnly
+                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
                 />
               </div>
             </div>
 
+            {/* Editable Quote */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                 <Type size={16} className="text-red-500" />
@@ -113,14 +118,16 @@ const App: React.FC = () => {
                 value={details.quote}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none shadow-sm"
+                placeholder="Enter your motivation here..."
               />
             </div>
 
+            {/* Read-Only Social Handle */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <AtSign size={16} className="text-yellow-500" />
-                Social Handle
+              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
+                <span className="flex items-center gap-2"><AtSign size={16} className="text-yellow-500" /> Social Handle</span>
+                <Lock size={14} className="text-slate-400" />
               </label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">@</span>
@@ -128,8 +135,8 @@ const App: React.FC = () => {
                   type="text"
                   name="socialHandle"
                   value={details.socialHandle}
-                  onChange={handleInputChange}
-                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  readOnly
+                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
                 />
               </div>
             </div>
@@ -139,16 +146,16 @@ const App: React.FC = () => {
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 transition-all ${
+              className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all ${
                 isDownloading 
                 ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
-                : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]'
+                : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200 active:scale-[0.98]'
               }`}
             >
               {isDownloading ? (
                 <>
                   <RefreshCw className="animate-spin" size={24} />
-                  Generating Image...
+                  Generating PNG...
                 </>
               ) : (
                 <>
@@ -166,7 +173,7 @@ const App: React.FC = () => {
             <span className="bg-blue-50 text-blue-600 text-[10px] px-2 py-1 rounded font-bold">1080x1350</span>
           </div>
           
-          <div className="relative w-full aspect-[4/5] max-w-[540px] bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+          <div className="relative w-full aspect-[4/5] max-w-[540px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
              <div className="absolute inset-0 overflow-hidden bg-[#F3F6FF]">
                <div className="absolute top-0 left-1/2 -translate-x-1/2 scale-[0.5] origin-top">
                  <GraphicTemplate id="graphic-preview" details={details} />
@@ -178,7 +185,7 @@ const App: React.FC = () => {
 
       <footer className="py-8 border-t border-slate-200 mt-auto bg-white">
         <div className="max-w-7xl mx-auto px-6 text-center text-slate-400 text-sm">
-          Built for GDG Leads & Creatives • 2024
+          Monday Motivation Tool • GDG Branding Updated
         </div>
       </footer>
     </div>
