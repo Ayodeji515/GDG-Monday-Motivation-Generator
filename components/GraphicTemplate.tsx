@@ -41,15 +41,15 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
 
       {/* Quote Container */}
       <div className="flex-1 flex flex-col items-center w-full px-20 justify-center">
-        <div className="relative w-full bg-[#4285F4] rounded-[56px] py-28 px-20 flex flex-col items-center justify-center text-white text-center shadow-2xl">
-           {/* Black Quotation Marks */}
-           <Quote size={96} className="absolute top-10 left-14 text-black opacity-90 rotate-180" fill="currentColor" />
+        <div className="relative w-full bg-[#4285F4] rounded-[56px] py-28 px-20 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-hidden">
+           {/* Centered Quote Icon in background as requested */}
+           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+             <Quote size={320} className="text-black opacity-10 rotate-180" fill="currentColor" />
+           </div>
            
-           <p className="text-[54px] font-medium leading-[1.2] max-w-[840px] whitespace-pre-line z-10">
-             {details.quote}
+           <p className="text-[54px] font-medium leading-[1.2] max-w-[840px] whitespace-pre-line z-10 relative">
+             {details.quote || "Your Motivation Here"}
            </p>
-           
-           <Quote size={96} className="absolute bottom-10 right-14 text-black opacity-90" fill="currentColor" />
            
            {/* Depth layers */}
            <div className="absolute -bottom-7 w-[92%] h-14 bg-[#1A73E8] -z-10 rounded-[40px] opacity-90"></div>
@@ -57,7 +57,7 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         </div>
       </div>
 
-      {/* Footer Branding - Adjusted with more space */}
+      {/* Footer Branding */}
       <div className="w-full bg-white h-52 mt-auto flex items-center justify-between px-20 border-t border-gray-100 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
         <div className="flex items-center gap-8">
           <BracketsLogo className="w-28 h-28" />

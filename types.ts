@@ -9,6 +9,6 @@ export interface GraphicDetails {
 export const DEFAULT_DETAILS: GraphicDetails = {
   chapterName: "Federal University Oye, Ekiti",
   subText: "On Campus",
-  quote: "You don't need to know everything\nYou just need to keep learning",
+  quote: "",
   socialHandle: "GDGocFuoye"
 };

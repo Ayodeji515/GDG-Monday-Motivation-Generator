@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import GraphicTemplate from './components/GraphicTemplate.tsx';
 import { GraphicDetails, DEFAULT_DETAILS } from './types.ts';
 import * as htmlToImage from 'html-to-image';
-import { Download, RefreshCw, Sparkles, Layout, Type, MapPin, AtSign, Lock } from 'lucide-react';
+import { Download, RefreshCw, Layout, Type, MapPin, AtSign, Lock } from 'lucide-react';
+import { BracketsLogo } from './components/GDGLogo.tsx';
 
 const App: React.FC = () => {
   const [details, setDetails] = useState<GraphicDetails>(DEFAULT_DETAILS);
@@ -20,12 +21,11 @@ const App: React.FC = () => {
 
     try {
       setIsDownloading(true);
-      // Brief delay for rendering
       await new Promise(r => setTimeout(r, 200));
       
       const dataUrl = await htmlToImage.toPng(element, {
         quality: 1,
-        pixelRatio: 3, // Higher quality for social media
+        pixelRatio: 3,
         width: 1080,
         height: 1350,
       });
@@ -43,7 +43,7 @@ const App: React.FC = () => {
   };
 
   const resetToDefault = () => {
-    setDetails(prev => ({ ...prev, quote: DEFAULT_DETAILS.quote }));
+    setDetails(prev => ({ ...prev, quote: "" }));
   };
 
   return (
@@ -52,9 +52,7 @@ const App: React.FC = () => {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 sm:px-6 py-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-600 p-2 rounded-xl">
-              <Sparkles className="text-white" size={20} />
-            </div>
+            <BracketsLogo className="w-10 h-10" />
             <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">GDG Monday Motivation</h1>
           </div>
           <button 
@@ -154,33 +152,25 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Preview Side - Responsive Scaling */}
+        {/* Preview Side */}
         <section className="flex flex-col items-center order-1 lg:order-2">
           <div className="w-full mb-6 flex justify-between items-center px-2">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Post Preview</h3>
-            <span className="bg-slate-200/50 text-slate-600 text-[10px] px-2 py-1 rounded-full font-bold">1080 × 1350 px</span>
           </div>
           
-          {/* Preview Wrapper that handles scaling for mobile */}
           <div className="w-full max-w-[540px] flex justify-center bg-slate-200/20 p-4 sm:p-8 rounded-[40px] border border-dashed border-slate-300">
              <div className="relative shadow-2xl rounded-3xl overflow-hidden bg-white w-full" style={{ aspectRatio: '1080 / 1350' }}>
-               {/* Fixed scaled container to ensure preview looks right on any screen */}
                <div className="absolute top-0 left-0 w-[1080px] h-[1350px] origin-top-left" style={{ transform: `scale(${window.innerWidth < 640 ? (window.innerWidth - 64) / 1080 : 0.42})` }}>
                  <GraphicTemplate id="graphic-preview" details={details} />
                </div>
              </div>
           </div>
-          
-          <p className="mt-8 text-slate-400 text-sm italic text-center max-w-sm px-6">
-            The graphic is perfectly sized for Instagram and LinkedIn posts.
-          </p>
         </section>
       </main>
 
       <footer className="py-10 border-t border-slate-200 mt-auto bg-white px-6">
         <div className="max-w-7xl mx-auto text-center space-y-2">
           <p className="text-slate-500 font-semibold text-sm tracking-wide">Google Developer Groups</p>
-          <p className="text-slate-400 text-xs uppercase tracking-widest font-bold">Internal Tooling • 2024</p>
         </div>
       </footer>
     </div>
