@@ -57,7 +57,7 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       </div>
 
       {/* 3. CENTER QUOTE BOX WITH LAYERED DEPTH PILLS */}
-      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-32">
+      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-44">
         <div className="relative w-full bg-[#4285F4] rounded-[50px] py-16 px-16 flex flex-col items-center justify-center text-[#1F1F1F] text-center shadow-lg min-h-[520px]">
            
            {/* Top Quote Icon */}
@@ -87,7 +87,7 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       </div>
 
       {/* 4. FOOTER BRANDING (Matches uploaded image exactly) */}
-      <div className="w-full bg-white h-44 mt-auto flex items-center justify-between px-20 border-t border-slate-100">
+      <div className="w-full bg-white h-48 mt-auto flex items-center justify-between px-20 border-t border-slate-100 pb-2">
         {/* Left Side: Branding */}
         <div className="flex items-center gap-6">
           <BracketsLogo className="w-22 h-22" />
