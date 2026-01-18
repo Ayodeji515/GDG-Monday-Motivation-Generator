@@ -11,8 +11,6 @@ const App: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    // Only allow changes to the quote field if we wanted strict locking, 
-    // but the request implies locking specific fields.
     setDetails(prev => ({ ...prev, [name]: value }));
   };
 
@@ -22,11 +20,12 @@ const App: React.FC = () => {
 
     try {
       setIsDownloading(true);
-      await new Promise(r => setTimeout(r, 100));
+      // Brief delay for rendering
+      await new Promise(r => setTimeout(r, 200));
       
       const dataUrl = await htmlToImage.toPng(element, {
         quality: 1,
-        pixelRatio: 2,
+        pixelRatio: 3, // Higher quality for social media
         width: 1080,
         height: 1350,
       });
@@ -44,100 +43,88 @@ const App: React.FC = () => {
   };
 
   const resetToDefault = () => {
-    setDetails(DEFAULT_DETAILS);
+    setDetails(prev => ({ ...prev, quote: DEFAULT_DETAILS.quote }));
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-6 py-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col">
+      {/* Responsive Header */}
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 sm:px-6 py-4 shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-600 p-2 rounded-lg">
-              <Sparkles className="text-white" size={24} />
+            <div className="bg-blue-600 p-2 rounded-xl">
+              <Sparkles className="text-white" size={20} />
             </div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">GDG Motivation Generator</h1>
+            <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">GDG Monday Motivation</h1>
           </div>
           <button 
             onClick={resetToDefault}
-            className="text-slate-500 hover:text-blue-600 flex items-center gap-2 text-sm font-medium transition-colors"
+            className="text-slate-500 hover:text-blue-600 flex items-center gap-2 text-sm font-semibold transition-colors bg-slate-50 px-3 py-2 rounded-lg"
           >
-            <RefreshCw size={16} />
+            <RefreshCw size={14} />
             Reset Quote
           </button>
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start">
-        <section className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-6 lg:p-8 space-y-6 border border-slate-100">
+      <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start mb-12">
+        
+        {/* Editor Side */}
+        <section className="bg-white rounded-[32px] shadow-xl shadow-slate-200/50 p-6 sm:p-8 space-y-8 border border-slate-100 order-2 lg:order-1">
           <div className="space-y-1">
             <h2 className="text-2xl font-bold text-slate-900">Customizer</h2>
-            <p className="text-slate-500">Update the weekly motivation text.</p>
+            <p className="text-slate-500 text-sm">Update the weekly text. Branding is locked to GDG standards.</p>
           </div>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                {/* Read-Only Chapter Name */}
                <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                  <span className="flex items-center gap-2"><MapPin size={16} className="text-blue-500" /> Chapter Name</span>
-                  <Lock size={14} className="text-slate-400" />
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center px-1">
+                  <span className="flex items-center gap-1.5"><MapPin size={14} className="text-blue-500" /> Chapter</span>
+                  <Lock size={12} />
                 </label>
-                <input
-                  type="text"
-                  name="chapterName"
-                  value={details.chapterName}
-                  readOnly
-                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
-                />
+                <div className="px-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 text-slate-600 font-medium text-sm">
+                  {details.chapterName}
+                </div>
               </div>
 
               {/* Read-Only Context Text */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                  <span className="flex items-center gap-2"><Layout size={16} className="text-green-500" /> Context Text</span>
-                  <Lock size={14} className="text-slate-400" />
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center px-1">
+                  <span className="flex items-center gap-1.5"><Layout size={14} className="text-green-500" /> Context</span>
+                  <Lock size={12} />
                 </label>
-                <input
-                  type="text"
-                  name="subText"
-                  value={details.subText}
-                  readOnly
-                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
-                />
+                <div className="px-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 text-slate-600 font-medium text-sm">
+                  {details.subText}
+                </div>
               </div>
             </div>
 
             {/* Editable Quote */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <Type size={16} className="text-red-500" />
-                Motivational Quote
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-1">
+                <Type size={14} className="text-red-500" />
+                Monday Motivation Quote
               </label>
               <textarea
                 name="quote"
                 value={details.quote}
                 onChange={handleInputChange}
-                rows={4}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none shadow-sm"
+                rows={5}
+                className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50/50 outline-none transition-all resize-none shadow-sm text-slate-700 leading-relaxed font-medium"
                 placeholder="Enter your motivation here..."
               />
             </div>
 
             {/* Read-Only Social Handle */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                <span className="flex items-center gap-2"><AtSign size={16} className="text-yellow-500" /> Social Handle</span>
-                <Lock size={14} className="text-slate-400" />
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center px-1">
+                <span className="flex items-center gap-1.5"><AtSign size={14} className="text-yellow-500" /> Social Handle</span>
+                <Lock size={12} />
               </label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">@</span>
-                <input
-                  type="text"
-                  name="socialHandle"
-                  value={details.socialHandle}
-                  readOnly
-                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed outline-none"
-                />
+              <div className="px-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 text-slate-600 font-bold text-sm">
+                @{details.socialHandle}
               </div>
             </div>
           </div>
@@ -146,7 +133,7 @@ const App: React.FC = () => {
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all ${
+              className={`w-full flex items-center justify-center gap-3 py-4.5 rounded-2xl font-bold text-lg shadow-xl transition-all h-16 ${
                 isDownloading 
                 ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
                 : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200 active:scale-[0.98]'
@@ -155,37 +142,45 @@ const App: React.FC = () => {
               {isDownloading ? (
                 <>
                   <RefreshCw className="animate-spin" size={24} />
-                  Generating PNG...
+                  Preparing...
                 </>
               ) : (
                 <>
                   <Download size={24} />
-                  Download Graphic
+                  Download PNG
                 </>
               )}
             </button>
           </div>
         </section>
 
-        <section className="flex flex-col items-center">
-          <div className="w-full mb-4 flex justify-between items-center px-4">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Live Preview</h3>
-            <span className="bg-blue-50 text-blue-600 text-[10px] px-2 py-1 rounded font-bold">1080x1350</span>
+        {/* Preview Side - Responsive Scaling */}
+        <section className="flex flex-col items-center order-1 lg:order-2">
+          <div className="w-full mb-6 flex justify-between items-center px-2">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Post Preview</h3>
+            <span className="bg-slate-200/50 text-slate-600 text-[10px] px-2 py-1 rounded-full font-bold">1080 × 1350 px</span>
           </div>
           
-          <div className="relative w-full aspect-[4/5] max-w-[540px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
-             <div className="absolute inset-0 overflow-hidden bg-[#F3F6FF]">
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 scale-[0.5] origin-top">
+          {/* Preview Wrapper that handles scaling for mobile */}
+          <div className="w-full max-w-[540px] flex justify-center bg-slate-200/20 p-4 sm:p-8 rounded-[40px] border border-dashed border-slate-300">
+             <div className="relative shadow-2xl rounded-3xl overflow-hidden bg-white w-full" style={{ aspectRatio: '1080 / 1350' }}>
+               {/* Fixed scaled container to ensure preview looks right on any screen */}
+               <div className="absolute top-0 left-0 w-[1080px] h-[1350px] origin-top-left" style={{ transform: `scale(${window.innerWidth < 640 ? (window.innerWidth - 64) / 1080 : 0.42})` }}>
                  <GraphicTemplate id="graphic-preview" details={details} />
                </div>
              </div>
           </div>
+          
+          <p className="mt-8 text-slate-400 text-sm italic text-center max-w-sm px-6">
+            The graphic is perfectly sized for Instagram and LinkedIn posts.
+          </p>
         </section>
       </main>
 
-      <footer className="py-8 border-t border-slate-200 mt-auto bg-white">
-        <div className="max-w-7xl mx-auto px-6 text-center text-slate-400 text-sm">
-          Monday Motivation Tool • GDG Branding Updated
+      <footer className="py-10 border-t border-slate-200 mt-auto bg-white px-6">
+        <div className="max-w-7xl mx-auto text-center space-y-2">
+          <p className="text-slate-500 font-semibold text-sm tracking-wide">Google Developer Groups</p>
+          <p className="text-slate-400 text-xs uppercase tracking-widest font-bold">Internal Tooling • 2024</p>
         </div>
       </footer>
     </div>

@@ -8,7 +8,7 @@ interface GDGLogoProps {
 
 /**
  * High-fidelity reconstruction of the Developer Brackets Logo
- * featuring the rounded capsule shapes in Google colors.
+ * Adjusted with more "breathing room" between the bracket pairs.
  */
 export const BracketsLogo: React.FC<GDGLogoProps> = ({ className = "w-16 h-16" }) => (
   <svg 
@@ -19,37 +19,36 @@ export const BracketsLogo: React.FC<GDGLogoProps> = ({ className = "w-16 h-16" }
   >
     {/* Left Bracket - Top (Red) */}
     <path 
-      d="M45 25L30 40" 
+      d="M38 25L23 40" 
       stroke="#EA4335" 
-      strokeWidth="12" 
+      strokeWidth="11" 
       strokeLinecap="round" 
     />
     {/* Left Bracket - Bottom (Blue) */}
     <path 
-      d="M30 40L45 55" 
+      d="M23 40L38 55" 
       stroke="#4285F4" 
-      strokeWidth="12" 
+      strokeWidth="11" 
       strokeLinecap="round" 
     />
     
     {/* Right Bracket - Top (Green) */}
     <path 
-      d="M55 25L70 40" 
+      d="M62 25L77 40" 
       stroke="#34A853" 
-      strokeWidth="12" 
+      strokeWidth="11" 
       strokeLinecap="round" 
     />
     {/* Right Bracket - Bottom (Yellow/Orange) */}
     <path 
-      d="M70 40L55 55" 
+      d="M77 40L62 55" 
       stroke="#FBBC04" 
-      strokeWidth="12" 
+      strokeWidth="11" 
       strokeLinecap="round" 
     />
   </svg>
 );
 
-// Fallback legacy components kept for reference or alternative UI spots
 export const GDGLogo: React.FC<GDGLogoProps> = ({ className }) => <BracketsLogo className={className} />;
 export const GoogleColorsLogo: React.FC<GDGLogoProps> = ({ className }) => <BracketsLogo className={className} />;
 export const GDGMark: React.FC<{ size?: number }> = ({ size }) => <BracketsLogo className={`w-${size/4} h-${size/4}`} />;
