@@ -42,9 +42,9 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       {/* Quote Container */}
       <div className="flex-1 flex flex-col items-center w-full px-20 justify-center">
         <div className="relative w-full bg-[#4285F4] rounded-[56px] py-28 px-20 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-hidden">
-           {/* Centered Quote Icon in background as requested */}
+           {/* Centered Quote Icon in background as requested - solid black with low opacity for watermark effect */}
            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <Quote size={320} className="text-black opacity-10 rotate-180" fill="currentColor" />
+             <Quote size={420} className="text-black opacity-[0.08] rotate-180" fill="currentColor" />
            </div>
            
            <p className="text-[54px] font-medium leading-[1.2] max-w-[840px] whitespace-pre-line z-10 relative">
