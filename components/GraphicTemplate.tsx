@@ -32,12 +32,12 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       className="relative flex flex-col items-center bg-[#EFF4FF] overflow-hidden"
       style={{ 
         width: '1080px', 
-        height: '1350px', 
+        height: '1600px', 
         fontFamily: "'Google Sans', 'Inter', sans-serif"
       }}
     >
       {/* 1. TOP HEADER SECTION */}
-      <div className="flex flex-col items-center mt-12 mb-6">
+      <div className="flex flex-col items-center mt-16 mb-8">
         <div className="mb-4">
           <BracketsLogo className="w-24 h-24" />
         </div>
@@ -50,23 +50,24 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       </div>
 
       {/* 2. MAIN TITLE */}
-      <div className="flex flex-col items-center mb-10">
+      <div className="flex flex-col items-center mb-12">
         <h1 className="text-[170px] font-bold text-[#1F1F1F] leading-[0.88] text-center tracking-tighter">
           Monday<br />Motivation
         </h1>
       </div>
 
       {/* 3. CENTER QUOTE BOX WITH LAYERED DEPTH PILLS */}
-      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-44">
-        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-16 px-16 flex flex-col items-center justify-center text-[#1F1F1F] text-center shadow-lg min-h-[520px]">
+      {/* Increased padding bottom (pb-64) to utilize new height and satisfy the "padding bottom" request */}
+      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-64">
+        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-20 px-16 flex flex-col items-center justify-center text-[#1F1F1F] text-center shadow-lg min-h-[560px]">
            
            {/* Top Quote Icon */}
-           <div className="mb-8 opacity-90">
+           <div className="mb-10 opacity-90">
              <Quote size={52} className="rotate-180" fill="currentColor" strokeWidth={0} />
            </div>
            
            {/* Quote Content */}
-           <div className="flex items-center justify-center w-full flex-1 mb-8">
+           <div className="flex items-center justify-center w-full flex-1 mb-10">
              <p 
               className="font-medium leading-[1.3] max-w-[850px] whitespace-pre-line"
               style={{ fontSize }}
@@ -86,8 +87,8 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         </div>
       </div>
 
-      {/* 4. FOOTER BRANDING (Matches uploaded image exactly) */}
-      <div className="w-full bg-white h-48 mt-auto flex items-center justify-between px-20 border-t border-slate-100 pb-2">
+      {/* 4. FOOTER BRANDING */}
+      <div className="w-full bg-white h-48 mt-auto flex items-center justify-between px-20 border-t border-slate-100 pb-4">
         {/* Left Side: Branding */}
         <div className="flex items-center gap-6">
           <BracketsLogo className="w-22 h-22" />

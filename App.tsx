@@ -21,7 +21,7 @@ const App: React.FC = () => {
       const availableWidth = container.clientWidth - padding;
       const availableHeight = container.clientHeight - padding;
       const scaleX = availableWidth / 1080;
-      const scaleY = availableHeight / 1350;
+      const scaleY = availableHeight / 1600; // Updated to match new height
       const newScale = Math.min(scaleX, scaleY);
       setScale(Math.max(newScale, 0.05)); 
     }
@@ -51,7 +51,7 @@ const App: React.FC = () => {
         quality: 1,
         pixelRatio: 3, 
         width: 1080,
-        height: 1350,
+        height: 1600, // Updated export dimension
       });
       const link = document.createElement('a');
       link.download = `GDG-Monday-Motivation-${Date.now()}.png`;
@@ -152,7 +152,7 @@ const App: React.FC = () => {
               <div className="p-5 bg-blue-50 rounded-2xl flex items-start gap-4">
                 <Layout size={20} className="text-blue-500 mt-1 flex-shrink-0" />
                 <p className="text-[11px] text-blue-800 font-medium leading-relaxed">
-                  Export is optimized for professional social feeds at 1080x1350px.
+                  Export is now optimized for a taller 1080x1600px format, providing more padding at the bottom.
                 </p>
               </div>
             </div>
@@ -163,10 +163,10 @@ const App: React.FC = () => {
         <section ref={previewContainerRef} className="flex-1 bg-slate-100 flex items-center justify-center p-4 lg:p-8 relative order-1 lg:order-2 overflow-hidden">
           <div 
             className="relative shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white transition-all duration-300 ease-out flex-shrink-0" 
-            style={{ width: `${1080 * scale}px`, height: `${1350 * scale}px` }}
+            style={{ width: `${1080 * scale}px`, height: `${1600 * scale}px` }}
           >
             <div 
-              className="absolute top-0 left-0 w-[1080px] h-[1350px] origin-top-left" 
+              className="absolute top-0 left-0 w-[1080px] h-[1600px] origin-top-left" 
               style={{ transform: `scale(${scale})` }}
             >
               <GraphicTemplate id="graphic-preview" details={details} />
