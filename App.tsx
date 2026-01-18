@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import GraphicTemplate from './components/GraphicTemplate.tsx';
 import { GraphicDetails, DEFAULT_DETAILS } from './types.ts';
 import * as htmlToImage from 'html-to-image';
@@ -9,6 +9,15 @@ import { BracketsLogo } from './components/GDGLogo.tsx';
 const App: React.FC = () => {
   const [details, setDetails] = useState<GraphicDetails>(DEFAULT_DETAILS);
   const [isDownloading, setIsDownloading] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-expand textarea as content grows
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = 'auto';
+      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+    }
+  }, [details.quote]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -99,20 +108,21 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Editable Quote */}
+            {/* Editable Quote - Auto-expanding and wrapping */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-1">
                 <Type size={14} className="text-red-500" />
                 Monday Motivation Quote
               </label>
               <textarea
+                ref={textAreaRef}
                 name="quote"
                 value={details.quote}
                 onChange={handleInputChange}
-                rows={5}
-                className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50/50 outline-none transition-all resize-none shadow-sm text-slate-700 leading-relaxed font-medium"
-                placeholder="Enter your motivation here..."
+                className="w-full min-h-[80px] px-5 py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50/50 outline-none transition-all resize-none overflow-hidden shadow-sm text-slate-700 leading-relaxed font-medium"
+                placeholder="Type your motivational message here..."
               />
+              <p className="text-[10px] text-slate-400 px-1 italic">The text field expands automatically as you type more.</p>
             </div>
 
             {/* Read-Only Social Handle */}
