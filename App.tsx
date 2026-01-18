@@ -13,37 +13,30 @@ const App: React.FC = () => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
-  // Responsive Scaling Logic: Adjusts the preview to fit the available screen space perfectly
+  // Dynamic Scaling Engine
   const updateScale = () => {
     if (previewContainerRef.current) {
       const container = previewContainerRef.current;
-      const horizontalPadding = window.innerWidth < 640 ? 20 : 60;
-      const verticalPadding = window.innerWidth < 640 ? 20 : 60;
+      const horizontalPadding = window.innerWidth < 640 ? 40 : 100;
+      const verticalPadding = window.innerWidth < 640 ? 40 : 100;
       
       const availableWidth = container.clientWidth - horizontalPadding;
       const availableHeight = container.clientHeight - verticalPadding;
       
-      // Target aspect ratio is 1080/1350 (0.8)
       const scaleX = availableWidth / 1080;
       const scaleY = availableHeight / 1350;
       
-      // Use the smaller scale to ensure it fits both width and height
       const newScale = Math.min(scaleX, scaleY);
-      setScale(Math.max(newScale, 0.15)); // Minimum 15% scale to prevent vanishing
+      setScale(Math.max(newScale, 0.1)); 
     }
   };
 
   useEffect(() => {
     window.addEventListener('resize', updateScale);
-    // Initial scale calculation with a small delay to allow DOM settling
-    const timer = setTimeout(updateScale, 100);
-    return () => {
-      window.removeEventListener('resize', updateScale);
-      clearTimeout(timer);
-    };
+    updateScale();
+    return () => window.removeEventListener('resize', updateScale);
   }, []);
 
-  // Auto-expand textarea as content grows
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = 'auto';
@@ -62,137 +55,124 @@ const App: React.FC = () => {
 
     try {
       setIsDownloading(true);
-      // Brief wait to ensure no pending renders affect the output
       await new Promise(r => setTimeout(r, 400));
       
-      // Force 1080x1350 dimensions for the final PNG regardless of screen size
       const dataUrl = await htmlToImage.toPng(element, {
         quality: 1,
-        pixelRatio: 2, // High DPI export
+        pixelRatio: 2, 
         width: 1080,
         height: 1350,
       });
 
       const link = document.createElement('a');
-      link.download = `GDG-Motivation-${new Date().toISOString().split('T')[0]}.png`;
+      link.download = `GDG-Monday-Motivation.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      console.error('Failed to generate image:', error);
-      alert('Generation failed. Please try a shorter quote or refresh.');
+      console.error('Download failed:', error);
     } finally {
       setIsDownloading(false);
     }
   };
 
-  const resetToDefault = () => {
-    setDetails(prev => ({ ...prev, quote: "" }));
-  };
-
   return (
     <div className="h-screen w-screen bg-white flex flex-col font-sans overflow-hidden">
-      {/* Ultra-Slim Header */}
-      <header className="bg-white border-b border-slate-100 px-4 py-2 sm:px-6 flex-shrink-0">
-        <div className="flex justify-between items-center max-w-full mx-auto">
-          <div className="flex items-center gap-2">
-            <BracketsLogo className="w-7 h-7 sm:w-9 sm:h-9" />
-            <span className="text-xs sm:text-sm font-black text-slate-900 tracking-tighter uppercase">
-              GDG MOTIVATION GEN
+      {/* Minimized Header */}
+      <header className="bg-white border-b border-slate-100 px-6 py-3 flex-shrink-0 z-10">
+        <div className="flex justify-between items-center w-full">
+          <div className="flex items-center gap-3">
+            <BracketsLogo className="w-8 h-8 sm:w-10 sm:h-10" />
+            <span className="text-sm font-black text-slate-900 tracking-tighter uppercase">
+              Monday Motivation Editor
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <button 
-              onClick={resetToDefault}
-              className="p-2 text-slate-300 hover:text-blue-500 transition-all rounded-full hover:bg-slate-50"
-              title="Clear text"
+              onClick={() => setDetails(prev => ({ ...prev, quote: "" }))}
+              className="text-slate-400 hover:text-blue-500 transition-colors"
             >
-              <RefreshCw size={16} />
+              <RefreshCw size={18} />
             </button>
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-black text-[10px] tracking-widest uppercase transition-all shadow-md active:scale-95 ${
+              className={`px-6 py-2.5 rounded-full font-black text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 ${
                 isDownloading 
                 ? 'bg-slate-100 text-slate-300' 
                 : 'bg-[#4285F4] text-white hover:bg-blue-600 shadow-blue-100'
               }`}
             >
-              {isDownloading ? 'Working...' : 'Download PNG'}
+              {isDownloading ? 'Working...' : 'Export 1080x1350 PNG'}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Zero-Spacing Main Content */}
+      {/* Main App Canvas */}
       <main className="flex-1 flex flex-col lg:flex-row w-full overflow-hidden">
         
-        {/* Editor Pane: Scrollable on Desktop, Header on Mobile */}
-        <section className="w-full lg:w-[400px] xl:w-[450px] p-5 sm:p-8 flex-shrink-0 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white overflow-y-auto">
-          <div className="space-y-6">
+        {/* Editor Sidebar */}
+        <section className="w-full lg:w-[420px] p-8 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white overflow-y-auto">
+          <div className="space-y-8">
             <div className="space-y-1">
-              <h2 className="text-xl font-black text-slate-900 leading-none">CONTENT</h2>
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Configure for Monday</p>
+              <h2 className="text-2xl font-black text-slate-900 leading-none">CUSTOMIZE</h2>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">Weekly Post Parameters</p>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                  <Type size={12} className="text-red-500" /> Message Body
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                  <Type size={14} className="text-blue-500" /> Quote Text
                 </label>
                 <textarea
                   ref={textAreaRef}
                   name="quote"
                   value={details.quote}
                   onChange={handleInputChange}
-                  className="w-full min-h-[80px] px-4 py-3 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none transition-all resize-none text-slate-800 leading-relaxed font-bold text-base shadow-inner"
-                  placeholder="What's the message for this week?"
+                  className="w-full min-h-[100px] px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none transition-all resize-none text-slate-800 leading-relaxed font-bold text-lg shadow-inner"
+                  placeholder="Enter motivation message..."
                 />
-                <div className="flex justify-between px-1">
-                  <span className="text-[9px] text-slate-300 font-bold uppercase italic">Text scales automatically</span>
-                  <span className="text-[9px] text-slate-400 font-bold">{details.quote.length} chars</span>
-                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                    <MapPin size={10} className="inline mr-1 text-blue-500" /> Chapter Name
+              <div className="grid grid-cols-1 gap-5">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <MapPin size={12} className="inline mr-1 text-red-500" /> Institution
                   </label>
-                  <div className="px-4 py-3 rounded-xl bg-slate-50 text-slate-400 font-bold text-xs truncate border border-slate-100">
+                  <div className="px-5 py-3.5 rounded-xl bg-slate-50 text-slate-400 font-bold text-sm border border-slate-100">
                     {details.chapterName}
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                    <AtSign size={10} className="inline mr-1 text-yellow-500" /> Social Identity
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <AtSign size={12} className="inline mr-1 text-green-500" /> Social Handle
                   </label>
-                  <div className="px-4 py-3 rounded-xl bg-slate-50 text-slate-400 font-bold text-xs border border-slate-100">
+                  <div className="px-5 py-3.5 rounded-xl bg-slate-50 text-slate-400 font-bold text-sm border border-slate-100">
                     @{details.socialHandle}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="pt-8 border-t border-slate-50">
-              <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl">
-                <Layout size={20} className="text-blue-500 flex-shrink-0" />
-                <p className="text-[10px] text-blue-700 font-bold leading-tight uppercase">
-                  Designed for the 4:5 aspect ratio (1080x1350) for maximum Instagram feed visibility.
+            <div className="pt-10 border-t border-slate-50 opacity-60">
+              <div className="flex items-center gap-3 p-5 bg-slate-50 rounded-2xl">
+                <Layout size={24} className="text-slate-400" />
+                <p className="text-[11px] text-slate-500 font-bold uppercase leading-tight">
+                  Image is optimized for 1080x1350px (Instagram 4:5 aspect ratio).
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Live Preview Pane: Dynamic Space Filler */}
+        {/* Live Preview Pane */}
         <section 
           ref={previewContainerRef}
-          className="flex-1 bg-[#F1F3F4] flex flex-col items-center justify-center relative overflow-hidden p-4"
+          className="flex-1 bg-[#F9FAFB] flex flex-col items-center justify-center relative p-6 sm:p-12 overflow-hidden"
         >
-          {/* Scaled Preview Box */}
           <div 
-            className="relative shadow-2xl rounded-sm overflow-hidden bg-white ring-8 ring-white/50 transition-transform duration-300 ease-out" 
+            className="relative shadow-2xl bg-white transition-transform duration-500 ease-in-out" 
             style={{ 
               width: `${1080 * scale}px`, 
               height: `${1350 * scale}px` 
@@ -206,8 +186,10 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className="mt-4 flex flex-col items-center gap-1 opacity-30 select-none">
-            <p className="text-[9px] font-black text-slate-900 uppercase tracking-[0.5em]">OUTPUT: 1080 x 1350 PX</p>
+          <div className="mt-8 flex flex-col items-center opacity-20 select-none">
+            <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.5em]">
+              POST PREVIEW • 1080x1350
+            </p>
           </div>
         </section>
       </main>
