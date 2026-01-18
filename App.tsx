@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import GraphicTemplate from './components/GraphicTemplate.tsx';
 import { GraphicDetails, DEFAULT_DETAILS } from './types.ts';
 import * as htmlToImage from 'html-to-image';
-import { Download, RefreshCw, Layout, Type, MapPin, AtSign, Lock } from 'lucide-react';
+import { Download, RefreshCw, Layout, Type, MapPin, AtSign } from 'lucide-react';
 import { BracketsLogo } from './components/GDGLogo.tsx';
 
 const App: React.FC = () => {
@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Update window width on resize for the preview scale calculation
   useEffect(() => {
@@ -38,8 +39,7 @@ const App: React.FC = () => {
 
     try {
       setIsDownloading(true);
-      // Small delay to ensure any layout shifts are settled
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise(r => setTimeout(r, 300));
       
       const dataUrl = await htmlToImage.toPng(element, {
         quality: 1,
@@ -49,7 +49,7 @@ const App: React.FC = () => {
       });
 
       const link = document.createElement('a');
-      link.download = `Monday-Motivation-${details.chapterName.replace(/\s+/g, '-')}.png`;
+      link.download = `GDG-Monday-Motivation.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
@@ -64,155 +64,153 @@ const App: React.FC = () => {
     setDetails(prev => ({ ...prev, quote: "" }));
   };
 
-  // Calculate the scale for the preview based on container width
-  // Mobile needs more padding, Desktop can have a larger scale
+  // Calculate scaling for all screens with minimal margins
   const getPreviewScale = () => {
-    const containerPadding = windowWidth < 640 ? 40 : 80;
-    const maxContainerWidth = Math.min(windowWidth - containerPadding, 500);
-    return maxContainerWidth / 1080;
+    const horizontalPadding = windowWidth < 640 ? 32 : 64;
+    const availableWidth = windowWidth < 1024 
+      ? windowWidth - horizontalPadding 
+      : (windowWidth / 2) - horizontalPadding;
+    
+    // We want the preview to be large but constrained by a max width on desktop
+    const targetWidth = Math.min(availableWidth, 540); 
+    return targetWidth / 1080;
   };
 
   const scale = getPreviewScale();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
-      {/* Responsive Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 sm:px-6 py-3 shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2.5">
+    <div className="min-h-screen bg-white flex flex-col font-sans overflow-x-hidden">
+      {/* Tight Header */}
+      <header className="bg-white border-b border-slate-100 sticky top-0 z-50 px-4 py-3 sm:px-6">
+        <div className="max-w-full mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2">
             <BracketsLogo className="w-8 h-8 sm:w-10 sm:h-10" />
-            <h1 className="text-sm sm:text-lg font-bold text-slate-900 tracking-tight whitespace-nowrap">
-              Monday Motivation
-            </h1>
+            <span className="text-sm sm:text-lg font-bold text-slate-900 tracking-tight uppercase">
+              Motivation Generator
+            </span>
           </div>
           <button 
             onClick={resetToDefault}
-            className="text-slate-400 hover:text-blue-600 flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold transition-colors bg-slate-50 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg border border-slate-100"
+            className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
+            title="Reset Quote"
           >
-            <RefreshCw size={12} />
-            <span className="hidden xs:inline">Reset</span>
+            <RefreshCw size={18} />
           </button>
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start">
+      {/* Main Content Area - Flexible and Tight */}
+      <main className="flex-1 flex flex-col lg:flex-row w-full">
         
-        {/* Editor Side */}
-        <section className="bg-white rounded-[24px] sm:rounded-[32px] shadow-xl shadow-slate-200/50 p-5 sm:p-8 space-y-6 border border-slate-100 order-2 lg:order-1">
+        {/* Editor Pane */}
+        <section className="w-full lg:w-1/2 p-4 sm:p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col gap-6">
           <div className="space-y-1">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Customizer</h2>
-            <p className="text-slate-400 text-xs sm:text-sm">Enter the weekly message. The graphic will auto-scale the text.</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">CUSTOMIZER</h2>
+            <p className="text-slate-400 text-xs sm:text-sm font-medium">Update content for next Monday's post.</p>
           </div>
 
-          <div className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-               {/* Read-Only Chapter Name */}
-               <div className="space-y-1.5">
-                <label className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest flex justify-between items-center px-1">
-                  <span className="flex items-center gap-1"><MapPin size={10} className="text-blue-500" /> Chapter</span>
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+               <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">
+                  <MapPin size={10} className="inline mr-1 text-blue-500" /> Chapter
                 </label>
-                <div className="px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-50 bg-slate-50/50 text-slate-500 font-medium text-[11px] sm:text-xs truncate">
+                <div className="px-3 py-2 rounded-lg bg-slate-50 text-slate-500 font-semibold text-[11px] truncate">
                   {details.chapterName}
                 </div>
               </div>
 
-              {/* Read-Only Context Text */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest flex justify-between items-center px-1">
-                  <span className="flex items-center gap-1"><Layout size={10} className="text-green-500" /> Context</span>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">
+                  <Layout size={10} className="inline mr-1 text-green-500" /> Context
                 </label>
-                <div className="px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-50 bg-slate-50/50 text-slate-500 font-medium text-[11px] sm:text-xs">
+                <div className="px-3 py-2 rounded-lg bg-slate-50 text-slate-500 font-semibold text-[11px]">
                   {details.subText}
                 </div>
               </div>
             </div>
 
-            {/* Editable Quote - Dynamic Height */}
             <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1 px-1">
-                <Type size={12} className="text-red-500" />
-                Quote Content
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">
+                <Type size={12} className="inline mr-1 text-red-500" /> Motivational Quote
               </label>
               <textarea
                 ref={textAreaRef}
                 name="quote"
                 value={details.quote}
                 onChange={handleInputChange}
-                className="w-full min-h-[48px] px-4 py-3.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50/50 outline-none transition-all resize-none overflow-hidden shadow-sm text-slate-700 leading-relaxed font-medium text-sm sm:text-base"
-                placeholder="Type your motivation message here..."
+                className="w-full min-h-[50px] px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-0 outline-none transition-all resize-none overflow-hidden text-slate-800 leading-relaxed font-semibold text-base sm:text-lg bg-slate-50/30"
+                placeholder="What's the message for this week?"
               />
-              <p className="text-[10px] text-slate-400 italic px-1">Text field expands as you type. Lines will break automatically.</p>
             </div>
 
-            {/* Read-Only Social Handle */}
-            <div className="space-y-1.5">
-              <label className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest flex justify-between items-center px-1">
-                <span className="flex items-center gap-1"><AtSign size={10} className="text-yellow-500" /> Social Handle</span>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">
+                <AtSign size={10} className="inline mr-1 text-yellow-500" /> Handle
               </label>
-              <div className="px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-50 bg-slate-50/50 text-slate-500 font-bold text-[11px] sm:text-xs">
+              <div className="px-3 py-2 rounded-lg bg-slate-50 text-slate-500 font-bold text-[11px]">
                 @{details.socialHandle}
               </div>
             </div>
           </div>
 
-          <div className="pt-2 sm:pt-4">
+          <div className="mt-auto pt-6">
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className={`w-full flex items-center justify-center gap-2.5 py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base shadow-lg transition-all h-14 sm:h-16 ${
+              className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-black text-sm sm:text-base tracking-widest uppercase transition-all h-16 shadow-xl active:scale-[0.98] ${
                 isDownloading 
-                ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
-                : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-100 active:scale-[0.98]'
+                ? 'bg-slate-100 text-slate-300' 
+                : 'bg-[#4285F4] text-white hover:bg-blue-600 shadow-blue-200'
               }`}
             >
               {isDownloading ? (
                 <>
-                  <RefreshCw className="animate-spin" size={18} />
-                  Generating PNG...
+                  <RefreshCw className="animate-spin" size={20} />
+                  PROCESSING...
                 </>
               ) : (
                 <>
-                  <Download size={20} />
-                  Download Graphic
+                  <Download size={22} />
+                  EXPORT IMAGE
                 </>
               )}
             </button>
           </div>
         </section>
 
-        {/* Preview Side */}
-        <section className="flex flex-col items-center order-1 lg:order-2">
-          <div className="w-full mb-4 flex justify-between items-center px-2">
-            <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Post Preview</h3>
+        {/* Preview Pane */}
+        <section className="w-full lg:w-1/2 bg-[#F8FAFC] flex flex-col items-center justify-center p-6 sm:p-12 relative min-h-[500px]">
+          <div className="absolute top-4 left-4 sm:top-8 sm:left-8">
+            <span className="text-[10px] font-black text-slate-300 tracking-[0.3em] uppercase">LIVE PREVIEW</span>
+          </div>
+
+          {/* Scaled Preview Box */}
+          <div 
+            className="relative shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden bg-white ring-1 ring-slate-100" 
+            style={{ 
+              width: `${1080 * scale}px`, 
+              height: `${1350 * scale}px` 
+            }}
+          >
+            <div 
+              className="absolute top-0 left-0 w-[1080px] h-[1350px] origin-top-left" 
+              style={{ transform: `scale(${scale})` }}
+            >
+              <GraphicTemplate id="graphic-preview" details={details} />
+            </div>
           </div>
           
-          <div className="w-full flex justify-center bg-slate-100/50 p-4 sm:p-8 rounded-[32px] sm:rounded-[40px] border border-dashed border-slate-200 overflow-hidden">
-             {/* Scaled Preview Box */}
-             <div 
-               className="relative shadow-2xl rounded-2xl overflow-hidden bg-white" 
-               style={{ 
-                 width: `${1080 * scale}px`, 
-                 height: `${1350 * scale}px` 
-               }}
-             >
-               <div 
-                className="absolute top-0 left-0 w-[1080px] h-[1350px] origin-top-left" 
-                style={{ transform: `scale(${scale})` }}
-               >
-                 <GraphicTemplate id="graphic-preview" details={details} />
-               </div>
-             </div>
+          <div className="mt-6 flex flex-col items-center gap-1 opacity-40">
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">1080 x 1350 • PNG</p>
           </div>
-          <p className="mt-4 text-[10px] text-slate-400 font-medium">1080 x 1350 (4:5 Aspect Ratio)</p>
         </section>
       </main>
 
-      <footer className="py-8 border-t border-slate-100 mt-auto bg-white px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-1">
-          <p className="text-slate-400 font-semibold text-[10px] sm:text-xs tracking-widest uppercase">
-            Google Developer Groups Internal Tooling
-          </p>
-          <p className="text-slate-300 text-[10px]">Federal University Oye, Ekiti</p>
+      <footer className="py-4 border-t border-slate-50 bg-white">
+        <div className="px-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <p className="text-[#4285F4] font-black text-[10px] tracking-widest uppercase">GDG CAMPUS TOOLING</p>
+          <p className="text-slate-300 text-[9px] font-medium tracking-wide">DESIGNED FOR GOOGLE DEVELOPER GROUPS</p>
         </div>
       </footer>
     </div>
