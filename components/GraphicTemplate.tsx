@@ -36,67 +36,66 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         fontFamily: "'Google Sans', 'Inter', sans-serif"
       }}
     >
-      {/* 1. TOP HEADER SECTION */}
-      <div className="flex flex-col items-center mt-16 mb-8">
-        <div className="mb-4">
-          <BracketsLogo className="w-24 h-24" />
+      {/* Main Content Wrapper to group everything except the very bottom spacing if any */}
+      <div className="flex flex-col items-center w-full flex-1">
+        
+        {/* 1. TOP HEADER SECTION */}
+        <div className="flex flex-col items-center mt-16 mb-8">
+          <div className="mb-4">
+            <BracketsLogo className="w-24 h-24" />
+          </div>
+          <h2 className="text-[34px] font-medium text-[#5F6368] tracking-tight">Google Developer Groups</h2>
+          <div className="flex items-center gap-1.5 text-[22px] font-medium mt-1">
+            <span className="text-[#4285F4] font-semibold">{subText}</span>
+            <span className="mx-0.5 text-[#5F6368] opacity-60">•</span>
+            <span className="text-[#5F6368] font-semibold">{chapterName}</span>
+          </div>
         </div>
-        <h2 className="text-[34px] font-medium text-[#5F6368] tracking-tight">Google Developer Groups</h2>
-        <div className="flex items-center gap-1.5 text-[22px] font-medium mt-1">
-          <span className="text-[#4285F4] font-semibold">{subText}</span>
-          <span className="mx-0.5 text-[#5F6368] opacity-60">•</span>
-          <span className="text-[#5F6368] font-semibold">{chapterName}</span>
+
+        {/* 2. MAIN TITLE */}
+        <div className="flex flex-col items-center mb-10">
+          <h1 className="text-[170px] font-bold text-[#1F1F1F] leading-[0.88] text-center tracking-tighter">
+            Monday<br />Motivation
+          </h1>
+        </div>
+
+        {/* 3. CENTER QUOTE BOX */}
+        <div className="flex flex-col items-center w-full px-16 justify-center mt-4 mb-20">
+          <div className="relative w-full bg-[#4285F4] rounded-[50px] py-20 px-16 flex flex-col items-center justify-center text-[#1F1F1F] text-center shadow-lg min-h-[560px]">
+             
+             <div className="mb-10 opacity-90">
+               <Quote size={52} className="rotate-180" fill="currentColor" strokeWidth={0} />
+             </div>
+             
+             <div className="flex items-center justify-center w-full flex-1 mb-10">
+               <p 
+                className="font-medium leading-[1.3] max-w-[850px] whitespace-pre-line"
+                style={{ fontSize }}
+               >
+                 {quoteText}
+               </p>
+             </div>
+
+             <div className="opacity-90">
+               <Quote size={52} fill="currentColor" strokeWidth={0} />
+             </div>
+             
+             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[76%] h-14 bg-[#1A73E8] -z-10 rounded-[35px]"></div>
+             <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[54%] h-14 bg-[#185ABC] -z-20 rounded-[35px]"></div>
+          </div>
         </div>
       </div>
 
-      {/* 2. MAIN TITLE */}
-      <div className="flex flex-col items-center mb-12">
-        <h1 className="text-[170px] font-bold text-[#1F1F1F] leading-[0.88] text-center tracking-tighter">
-          Monday<br />Motivation
-        </h1>
-      </div>
-
-      {/* 3. CENTER QUOTE BOX WITH LAYERED DEPTH PILLS */}
-      {/* Increased padding bottom (pb-64) to utilize new height and satisfy the "padding bottom" request */}
-      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-64">
-        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-20 px-16 flex flex-col items-center justify-center text-[#1F1F1F] text-center shadow-lg min-h-[560px]">
-           
-           {/* Top Quote Icon */}
-           <div className="mb-10 opacity-90">
-             <Quote size={52} className="rotate-180" fill="currentColor" strokeWidth={0} />
-           </div>
-           
-           {/* Quote Content */}
-           <div className="flex items-center justify-center w-full flex-1 mb-10">
-             <p 
-              className="font-medium leading-[1.3] max-w-[850px] whitespace-pre-line"
-              style={{ fontSize }}
-             >
-               {quoteText}
-             </p>
-           </div>
-
-           {/* Bottom Quote Icon */}
-           <div className="opacity-90">
-             <Quote size={52} fill="currentColor" strokeWidth={0} />
-           </div>
-           
-           {/* STACKED PILLS EFFECT (Tabs at the bottom) */}
-           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[76%] h-14 bg-[#1A73E8] -z-10 rounded-[35px]"></div>
-           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[54%] h-14 bg-[#185ABC] -z-20 rounded-[35px]"></div>
-        </div>
-      </div>
-
-      {/* 4. FOOTER BRANDING */}
-      <div className="w-full bg-white h-48 mt-auto flex items-center justify-between px-20 border-t border-slate-100 pb-4">
+      {/* 4. FOOTER BRANDING - Shifted Up Closer */}
+      <div className="w-full bg-white h-56 flex items-center justify-between px-20 border-t border-slate-100 shadow-[0_-10px_40px_rgba(0,0,0,0.03)] pb-6">
         {/* Left Side: Branding */}
         <div className="flex items-center gap-6">
-          <BracketsLogo className="w-22 h-22" />
+          <BracketsLogo className="w-24 h-24" />
           <div className="flex flex-col">
-            <span className="text-[36px] font-bold text-[#1F1F1F] tracking-tight leading-none mb-1">
+            <span className="text-[38px] font-bold text-[#1F1F1F] tracking-tight leading-none mb-1">
               Google Developer Groups
             </span>
-            <span className="text-[22px] font-bold text-[#4285F4] tracking-tight leading-none">
+            <span className="text-[24px] font-bold text-[#4285F4] tracking-tight leading-none">
               {chapterName}
             </span>
           </div>
@@ -106,25 +105,25 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         <div className="flex items-center gap-14">
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-3.5 text-[#1F1F1F]">
-              <div className="w-10 h-10 rounded-full border-[2.5px] border-[#1F1F1F] flex items-center justify-center">
-                <Instagram size={20} strokeWidth={2.8} />
+              <div className="w-11 h-11 rounded-full border-[3px] border-[#1F1F1F] flex items-center justify-center">
+                <Instagram size={22} strokeWidth={2.8} />
               </div>
-              <div className="w-10 h-10 rounded-full bg-[#1F1F1F] flex items-center justify-center text-white">
-                <Twitter size={20} fill="currentColor" strokeWidth={0} />
+              <div className="w-11 h-11 rounded-full bg-[#1F1F1F] flex items-center justify-center text-white">
+                <Twitter size={22} fill="currentColor" strokeWidth={0} />
               </div>
-              <div className="w-10 h-10 rounded-full bg-[#1F1F1F] flex items-center justify-center text-white">
-                <Linkedin size={20} fill="currentColor" strokeWidth={0} />
+              <div className="w-11 h-11 rounded-full bg-[#1F1F1F] flex items-center justify-center text-white">
+                <Linkedin size={22} fill="currentColor" strokeWidth={0} />
               </div>
             </div>
             {/* Handle Text */}
-            <span className="text-[28px] font-bold text-[#1F1F1F] tracking-tight">
+            <span className="text-[32px] font-bold text-[#1F1F1F] tracking-tight">
               {socialHandle}
             </span>
           </div>
           
           {/* Globe Icon */}
           <div className="text-[#1F1F1F] opacity-90">
-            <Globe size={60} strokeWidth={1.2} />
+            <Globe size={64} strokeWidth={1.2} />
           </div>
         </div>
       </div>
