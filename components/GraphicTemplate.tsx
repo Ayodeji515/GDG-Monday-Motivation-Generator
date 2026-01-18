@@ -10,6 +10,19 @@ interface GraphicTemplateProps {
 }
 
 const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
+  // Logic to determine font size based on quote length for auto-responsiveness
+  const getFontSize = (text: string) => {
+    const length = text.length;
+    if (length < 80) return '72px';
+    if (length < 160) return '60px';
+    if (length < 300) return '52px';
+    if (length < 500) return '44px';
+    return '36px';
+  };
+
+  const quoteText = details.quote || "Your Motivation Here";
+  const fontSize = getFontSize(quoteText);
+
   return (
     <div 
       id={id}
@@ -21,7 +34,7 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       }}
     >
       {/* Top Header Section */}
-      <div className="flex flex-col items-center mt-14 mb-14">
+      <div className="flex flex-col items-center mt-14 mb-12">
         <div className="mb-6">
           <BracketsLogo className="w-36 h-36" />
         </div>
@@ -33,7 +46,7 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       </div>
 
       {/* Main Title */}
-      <div className="flex flex-col items-center mb-10">
+      <div className="flex flex-col items-center mb-8">
         <h1 className="text-[130px] font-bold text-gray-900 leading-[1.0] text-center tracking-tighter">
           Monday<br />Motivation
         </h1>
@@ -41,21 +54,24 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
 
       {/* Quote Container */}
       <div className="flex-1 flex flex-col items-center w-full px-12 justify-center">
-        <div className="relative w-full bg-[#4285F4] rounded-[64px] py-32 px-16 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-visible">
+        <div className="relative w-full bg-[#4285F4] rounded-[64px] py-24 px-16 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-visible min-h-[500px]">
            
            {/* Top Double Quote Icon - Centered */}
-           <div className="mb-8">
-             <Quote size={100} className="text-black rotate-180" fill="currentColor" />
+           <div className="mb-10">
+             <Quote size={90} className="text-black rotate-180" fill="currentColor" />
            </div>
            
-           {/* Wider text area (max-w increased from 840px to 920px) */}
-           <p className="text-[56px] font-medium leading-[1.25] max-w-[920px] whitespace-pre-line z-10 relative">
-             {details.quote || "Your Motivation Here"}
+           {/* Auto-responsive text area */}
+           <p 
+            className="font-medium leading-[1.3] max-w-[940px] whitespace-pre-line z-10 relative transition-all duration-300"
+            style={{ fontSize }}
+           >
+             {quoteText}
            </p>
 
            {/* Bottom Double Quote Icon - Centered */}
-           <div className="mt-8">
-             <Quote size={100} className="text-black" fill="currentColor" />
+           <div className="mt-10">
+             <Quote size={90} className="text-black" fill="currentColor" />
            </div>
            
            {/* Depth layers */}
