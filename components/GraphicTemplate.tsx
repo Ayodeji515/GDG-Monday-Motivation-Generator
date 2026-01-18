@@ -40,16 +40,23 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
       </div>
 
       {/* Quote Container */}
-      <div className="flex-1 flex flex-col items-center w-full px-20 justify-center">
-        <div className="relative w-full bg-[#4285F4] rounded-[56px] py-28 px-20 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-hidden">
-           {/* Centered Quote Icon in background as requested - solid black with low opacity for watermark effect */}
-           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <Quote size={420} className="text-black opacity-[0.08] rotate-180" fill="currentColor" />
+      <div className="flex-1 flex flex-col items-center w-full px-12 justify-center">
+        <div className="relative w-full bg-[#4285F4] rounded-[64px] py-32 px-16 flex flex-col items-center justify-center text-white text-center shadow-2xl overflow-visible">
+           
+           {/* Top Double Quote Icon - Centered */}
+           <div className="mb-8">
+             <Quote size={100} className="text-black rotate-180" fill="currentColor" />
            </div>
            
-           <p className="text-[54px] font-medium leading-[1.2] max-w-[840px] whitespace-pre-line z-10 relative">
+           {/* Wider text area (max-w increased from 840px to 920px) */}
+           <p className="text-[56px] font-medium leading-[1.25] max-w-[920px] whitespace-pre-line z-10 relative">
              {details.quote || "Your Motivation Here"}
            </p>
+
+           {/* Bottom Double Quote Icon - Centered */}
+           <div className="mt-8">
+             <Quote size={100} className="text-black" fill="currentColor" />
+           </div>
            
            {/* Depth layers */}
            <div className="absolute -bottom-7 w-[92%] h-14 bg-[#1A73E8] -z-10 rounded-[40px] opacity-90"></div>
