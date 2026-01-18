@@ -37,9 +37,9 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         fontFamily: "'Google Sans', 'Inter', sans-serif"
       }}
     >
-      {/* 1. HEADER SECTION (MATCHING REFERENCE) */}
-      <div className="flex flex-col items-center mt-12 mb-10">
-        <div className="mb-4">
+      {/* 1. HEADER SECTION */}
+      <div className="flex flex-col items-center mt-12 mb-8">
+        <div className="mb-4 scale-110">
           <BracketsLogo className="w-24 h-24" />
         </div>
         <h2 className="text-[32px] font-medium text-[#5F6368] tracking-tight">Google Developer Groups</h2>
@@ -50,19 +50,19 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
         </div>
       </div>
 
-      {/* 2. MAIN TITLE (MATCHING REFERENCE) */}
+      {/* 2. MAIN TITLE (Bold & Stacked) */}
       <div className="flex flex-col items-center mb-10">
-        <h1 className="text-[155px] font-bold text-[#1F1F1F] leading-[0.88] text-center tracking-tighter">
+        <h1 className="text-[170px] font-bold text-[#1F1F1F] leading-[0.85] text-center tracking-tighter">
           Monday<br />Motivation
         </h1>
       </div>
 
-      {/* 3. CENTRAL QUOTE BOX WITH DEPTH PILLS */}
-      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-28">
-        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-16 px-16 flex flex-col items-center justify-center text-white text-center shadow-lg min-h-[500px]">
+      {/* 3. CENTRAL QUOTE BOX WITH LAYERED PILLS */}
+      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-32">
+        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-20 px-16 flex flex-col items-center justify-center text-white text-center shadow-lg min-h-[500px] z-10">
            
            {/* Top Quote Icon */}
-           <div className="mb-10 opacity-80">
+           <div className="mb-10 opacity-90">
              <Quote size={52} className="text-[#1F1F1F] rotate-180" fill="currentColor" strokeWidth={0} />
            </div>
            
@@ -77,42 +77,55 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
            </div>
 
            {/* Bottom Quote Icon */}
-           <div className="opacity-80">
+           <div className="opacity-90">
              <Quote size={52} className="text-[#1F1F1F]" fill="currentColor" strokeWidth={0} />
            </div>
            
-           {/* LAYERED PILL DEPTH EFFECT */}
-           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[72%] h-14 bg-[#1A73E8] -z-10 rounded-[30px]"></div>
-           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[52%] h-14 bg-[#185ABC] -z-20 rounded-[30px]"></div>
+           {/* LAYERED PILL DEPTH EFFECT (Stacked beneath the main box) */}
+           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[76%] h-14 bg-[#1A73E8] -z-10 rounded-[30px]"></div>
+           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[54%] h-14 bg-[#185ABC] -z-20 rounded-[30px]"></div>
         </div>
       </div>
 
-      {/* 4. FOOTER (MATCHING REFERENCE) */}
-      <div className="w-full bg-white h-44 mt-auto flex items-center justify-between px-20 border-t border-slate-50">
-        {/* Branding Cluster */}
-        <div className="flex items-center gap-5">
-          <BracketsLogo className="w-22 h-22" />
-          <div className="flex flex-col">
-            <span className="text-[34px] font-bold text-[#1F1F1F] tracking-tight">Google Developer Groups</span>
-            <span className="text-[20px] font-bold text-[#4285F4] tracking-tight">{details.chapterName}</span>
+      {/* 4. FOOTER (Exact Match to Image) */}
+      <div className="w-full bg-white h-44 mt-auto flex items-center justify-between px-20 border-t border-[#E8EAED]">
+        {/* Branding Cluster (Logo + Stacked Text) */}
+        <div className="flex items-center gap-6">
+          <BracketsLogo className="w-20 h-20" />
+          <div className="flex flex-col justify-center">
+            <span className="text-[34px] font-bold text-[#1F1F1F] tracking-tight leading-none mb-1">
+              Google Developer Groups
+            </span>
+            <span className="text-[20px] font-bold text-[#4285F4] tracking-tight leading-none">
+              {details.chapterName}
+            </span>
           </div>
         </div>
 
-        {/* Socials & Icons */}
-        <div className="flex items-center gap-12">
+        {/* Socials & Icons (Icons + Handle + Globe) */}
+        <div className="flex items-center gap-14">
           <div className="flex items-center gap-4">
+            {/* Social Icons (Black/Dark Grey style from image) */}
             <div className="flex items-center gap-3 text-[#1F1F1F]">
-              <Instagram size={36} strokeWidth={2.5} />
-              <Twitter size={36} fill="currentColor" strokeWidth={0} />
-              <Linkedin size={36} fill="currentColor" strokeWidth={0} />
+              <div className="flex items-center justify-center p-1.5 rounded-full border-[2.5px] border-[#1F1F1F]">
+                <Instagram size={28} strokeWidth={2.8} />
+              </div>
+              <div className="flex items-center justify-center p-1.5 rounded-full border-[2.5px] border-[#1F1F1F]">
+                <Twitter size={28} fill="currentColor" strokeWidth={0} />
+              </div>
+              <div className="flex items-center justify-center p-1.5 rounded-full border-[2.5px] border-[#1F1F1F]">
+                <Linkedin size={28} fill="currentColor" strokeWidth={0} />
+              </div>
             </div>
-            <span className="text-[26px] font-bold text-[#1F1F1F] ml-2 tracking-tighter">
+            {/* Social Handle */}
+            <span className="text-[28px] font-bold text-[#1F1F1F] tracking-tight ml-2">
               {details.socialHandle}
             </span>
           </div>
           
-          <div className="text-[#1F1F1F] opacity-90">
-            <Globe size={52} strokeWidth={1.2} />
+          {/* Globe Icon */}
+          <div className="text-[#1F1F1F] opacity-90 ml-4">
+            <Globe size={56} strokeWidth={1.5} />
           </div>
         </div>
       </div>
