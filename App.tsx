@@ -22,7 +22,7 @@ const App: React.FC = () => {
     if (previewContainerRef.current) {
       const container = previewContainerRef.current;
       // Minimal padding to maximize "Big" visibility as requested
-      const padding = 24; 
+      const padding = window.innerWidth < 1024 ? 16 : 48; 
       
       const availableWidth = container.clientWidth - padding;
       const availableHeight = container.clientHeight - padding;
@@ -57,7 +57,8 @@ const App: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setDetails(prev => ({ ...prev, [name]: value }));
+    // Ensure value is a string to avoid React rendering errors
+    setDetails(prev => ({ ...prev, [name]: String(value) }));
   };
 
   const handleDownload = async () => {
@@ -66,6 +67,7 @@ const App: React.FC = () => {
 
     try {
       setIsDownloading(true);
+      // Brief delay for visual stability
       await new Promise(r => setTimeout(r, 600));
       
       const dataUrl = await htmlToImage.toPng(element, {
@@ -81,7 +83,7 @@ const App: React.FC = () => {
       link.click();
     } catch (error) {
       console.error('Export error:', error);
-      alert('Failed to generate image. Please check your browser permissions.');
+      alert('Failed to generate image. Please try a modern browser like Chrome.');
     } finally {
       setIsDownloading(false);
     }
@@ -90,14 +92,14 @@ const App: React.FC = () => {
   return (
     <div className="h-screen w-full bg-[#F8F9FA] flex flex-col font-sans overflow-hidden">
       {/* Header Bar */}
-      <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between z-50 shadow-sm">
+      <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between z-50 shadow-sm flex-shrink-0">
         <div className="flex items-center gap-3">
           <BracketsLogo className="w-9 h-9" />
           <div className="flex flex-col">
             <h1 className="text-xs font-black text-slate-900 tracking-tighter uppercase leading-none">
               Graphic Studio
             </h1>
-            <span className="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-0.5">
+            <span className="text-[10px] text-blue-600 font-bold uppercase tracking-widest mt-0.5">
               Monday Motivation
             </span>
           </div>
@@ -121,20 +123,20 @@ const App: React.FC = () => {
             }`}
           >
             <Download size={14} />
-            {isDownloading ? 'Processing...' : 'Export Image'}
+            {isDownloading ? 'Processing...' : 'Export Post'}
           </button>
         </div>
       </header>
 
-      {/* Main Container */}
+      {/* Main Workspace */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        {/* Live Preview Area - SHOWN FIRST ON MOBILE */}
+        {/* LIVE PREVIEW SECTION (Visible first on mobile) */}
         <section 
           ref={previewContainerRef}
-          className="flex-1 h-[55vh] lg:h-full bg-slate-50 flex flex-col items-center justify-center p-4 lg:p-12 relative order-1 lg:order-2 overflow-hidden"
+          className="flex-1 min-h-[50vh] lg:h-full bg-slate-100 flex flex-col items-center justify-center p-4 lg:p-8 relative order-1 lg:order-2 overflow-hidden"
         >
-          {/* Canvas Wrapper */}
+          {/* Main Rendering Canvas */}
           <div 
             className="relative shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white transition-all duration-300 ease-out" 
             style={{ 
@@ -150,23 +152,23 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 lg:bottom-10 lg:top-auto pointer-events-none opacity-20">
-            <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.6em]">
-              Real-time Preview
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none opacity-20">
+            <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.6em] whitespace-nowrap">
+              High Resolution Preview
             </span>
           </div>
         </section>
 
-        {/* Editor Sidebar */}
-        <aside className="w-full lg:w-[440px] bg-white border-t lg:border-t-0 lg:border-r border-slate-200 overflow-y-auto p-6 sm:p-10 order-2 lg:order-1 shadow-2xl lg:shadow-none">
+        {/* CONTENT EDITOR SIDEBAR */}
+        <aside className="w-full lg:w-[440px] bg-white border-t lg:border-t-0 lg:border-r border-slate-200 overflow-y-auto p-6 sm:p-10 order-2 lg:order-1 shadow-2xl lg:shadow-none flex-shrink-0">
           <div className="space-y-10 max-w-[400px] mx-auto">
             <div className="space-y-1">
               <h2 className="text-2xl font-black text-slate-900 tracking-tight">Post Content</h2>
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Update post details below</p>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Update details for the next Monday Motivation</p>
             </div>
 
             <div className="space-y-8">
-              {/* Message Input */}
+              {/* Motivation Text Area */}
               <div className="space-y-3">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <Type size={14} className="text-blue-500" /> Motivational Quote
@@ -176,24 +178,28 @@ const App: React.FC = () => {
                   name="quote"
                   value={details.quote}
                   onChange={handleInputChange}
-                  className="w-full min-h-[120px] px-5 py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none transition-all resize-none text-slate-800 font-bold text-lg leading-relaxed shadow-sm"
-                  placeholder="Paste your weekly motivation message here..."
+                  className="w-full min-h-[140px] px-5 py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none transition-all resize-none text-slate-800 font-bold text-lg leading-relaxed shadow-sm"
+                  placeholder="Type or paste your quote here..."
                 />
               </div>
 
-              {/* Branding Info */}
+              {/* Branding Configuration */}
               <div className="grid grid-cols-1 gap-5">
                 <div className="p-5 rounded-2xl bg-blue-50 border border-blue-100 flex items-start gap-4">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
                     <MapPin size={16} className="text-blue-500" />
                   </div>
-                  <div>
+                  <div className="flex-1 overflow-hidden">
                     <label className="text-[9px] font-black text-blue-400 uppercase tracking-widest block mb-1">
-                      Organization
+                      Organization Chapter
                     </label>
-                    <p className="text-blue-900 font-bold text-sm leading-tight">
-                      {details.chapterName}
-                    </p>
+                    <input
+                      type="text"
+                      name="chapterName"
+                      value={details.chapterName}
+                      onChange={handleInputChange}
+                      className="w-full bg-transparent text-blue-900 font-bold text-sm leading-tight outline-none border-b border-transparent focus:border-blue-200"
+                    />
                   </div>
                 </div>
 
@@ -201,23 +207,29 @@ const App: React.FC = () => {
                    <div className="p-2 bg-white rounded-lg shadow-sm">
                     <AtSign size={16} className="text-slate-500" />
                   </div>
-                  <div>
+                  <div className="flex-1 overflow-hidden">
                     <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">
                       Social Handle
                     </label>
-                    <p className="text-slate-700 font-bold text-sm leading-tight">
-                      @{details.socialHandle}
-                    </p>
+                    <input
+                      type="text"
+                      name="socialHandle"
+                      value={details.socialHandle}
+                      onChange={handleInputChange}
+                      className="w-full bg-transparent text-slate-700 font-bold text-sm leading-tight outline-none border-b border-transparent focus:border-slate-300"
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Design Specifications Hint */}
             <div className="pt-8 border-t border-slate-100">
               <div className="p-5 bg-slate-50 rounded-2xl flex items-start gap-4">
-                <Layout size={20} className="text-slate-400 mt-1" />
+                <Layout size={20} className="text-slate-400 mt-1 flex-shrink-0" />
                 <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
-                  The graphic is fixed at 1080x1350px (Portrait 4:5). This format is optimized for high engagement on Instagram, Twitter, and LinkedIn.
+                  Output: 1080x1350px (Portrait 4:5).<br/>
+                  Perfect for Instagram, LinkedIn, and Twitter feeds.
                 </p>
               </div>
             </div>
