@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import GraphicTemplate from './components/GraphicTemplate.tsx';
 import { GraphicDetails, DEFAULT_DETAILS } from './types.ts';
 import * as htmlToImage from 'html-to-image';
-import { Download, RefreshCw, Type, MapPin, AtSign, Layout } from 'lucide-react';
+import { Download, RefreshCw, Type, MapPin, AtSign } from 'lucide-react';
 import { BracketsLogo } from './components/GDGLogo.tsx';
 
 const App: React.FC = () => {
@@ -177,16 +177,6 @@ const App: React.FC = () => {
                     <p className="text-slate-700 font-bold text-[10px] lg:text-sm leading-tight truncate">@{details.socialHandle}</p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Desktop Only Tip */}
-            <div className="hidden lg:block pt-8 border-t border-slate-100">
-              <div className="p-5 bg-blue-50 rounded-2xl flex items-start gap-4">
-                <Layout size={20} className="text-blue-500 mt-1 flex-shrink-0" />
-                <p className="text-[11px] text-blue-800 font-medium leading-relaxed">
-                  Export is optimized for high-resolution 1080x1600px posts.
-                </p>
               </div>
             </div>
           </div>
