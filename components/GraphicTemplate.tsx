@@ -10,23 +10,21 @@ interface GraphicTemplateProps {
 }
 
 const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
-  // Safe rendering values to prevent Error #31
-  const chapterNameText = details?.chapterName || "Google Developer Groups";
+  const chapterName = details?.chapterName || "Federal University Oye, Ekiti";
   const subText = details?.subText || "On Campus";
-  const socialHandle = details?.socialHandle || "GDG";
+  const socialHandle = details?.socialHandle || "GDGocFuoye";
   const quoteText = details?.quote || "You don't need to know everything\nYou just need to keep learning";
 
   /**
-   * Adaptive typography for the quote.
-   * Ensures the text remains legible regardless of length.
+   * Adaptive typography for the quote box to maintain visual balance.
    */
   const getFontSize = (text: string) => {
     const length = text.length;
-    if (length === 0) return '72px';
-    if (length < 50) return '82px';
-    if (length < 100) return '68px';
-    if (length < 160) return '56px';
-    return '44px';
+    if (length === 0) return '76px';
+    if (length < 40) return '88px';
+    if (length < 90) return '72px';
+    if (length < 150) return '60px';
+    return '48px';
   };
 
   const fontSize = getFontSize(quoteText);
@@ -34,104 +32,92 @@ const GraphicTemplate: React.FC<GraphicTemplateProps> = ({ details, id }) => {
   return (
     <div 
       id={id}
-      className="relative flex flex-col items-center bg-[#F1F3F4] overflow-hidden"
+      className="relative flex flex-col items-center bg-[#EFF4FF] overflow-hidden"
       style={{ 
         width: '1080px', 
         height: '1350px', 
         fontFamily: "'Google Sans', 'Inter', sans-serif"
       }}
     >
-      {/* --- HEADER --- */}
-      <div className="flex flex-col items-center mt-14 mb-10">
-        <div className="mb-5 scale-110">
+      {/* 1. TOP LOGO AND CHAPTER HEADER */}
+      <div className="flex flex-col items-center mt-12 mb-8">
+        <div className="mb-4">
           <BracketsLogo className="w-24 h-24" />
         </div>
-        <h2 className="text-[34px] font-medium text-[#5F6368] tracking-tight">
-          Google Developer Groups
-        </h2>
-        <div className="flex items-center gap-2 text-[22px] font-medium mt-1.5 text-[#4285F4]">
+        <h2 className="text-[34px] font-medium text-[#5F6368] tracking-tight">Google Developer Groups</h2>
+        <div className="flex items-center gap-1.5 text-[22px] font-medium mt-1 text-[#4285F4]">
           <span className="font-semibold">{subText}</span>
-          <span className="mx-0.5 opacity-40">•</span>
-          <span className="font-semibold">{chapterNameText}</span>
+          <span className="mx-0.5 opacity-60">•</span>
+          <span className="font-semibold">{chapterName}</span>
         </div>
       </div>
 
-      {/* --- HERO TITLE --- */}
+      {/* 2. MONDAY MOTIVATION TYPOGRAPHY */}
       <div className="flex flex-col items-center mb-10">
-        <h1 className="text-[160px] font-bold text-[#202124] leading-[0.85] text-center tracking-tighter">
+        <h1 className="text-[170px] font-bold text-[#1F1F1F] leading-[0.88] text-center tracking-tighter">
           Monday<br />Motivation
         </h1>
       </div>
 
-      {/* --- QUOTE BOX (Signature Component) --- */}
-      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-32">
-        <div className="relative w-full bg-[#4285F4] rounded-[60px] py-20 px-16 flex flex-col items-center justify-center text-white text-center shadow-2xl min-h-[520px] z-10">
+      {/* 3. CENTER QUOTE BOX WITH DEPTH EFFECT */}
+      <div className="flex-1 flex flex-col items-center w-full px-16 justify-center pb-24">
+        <div className="relative w-full bg-[#4285F4] rounded-[50px] py-16 px-16 flex flex-col items-center justify-center text-white text-center shadow-lg min-h-[520px]">
            
-           {/* Top Ornament */}
-           <div className="mb-12 opacity-80">
-             <Quote size={56} className="text-[#1F1F1F] rotate-180" fill="currentColor" strokeWidth={0} />
+           {/* Top Quote Icon */}
+           <div className="mb-10 opacity-90">
+             <Quote size={52} className="text-[#1F1F1F] rotate-180" fill="currentColor" strokeWidth={0} />
            </div>
            
-           {/* Quote Body */}
-           <div className="flex items-center justify-center w-full flex-1 mb-12">
+           {/* Quote Content */}
+           <div className="flex items-center justify-center w-full flex-1 mb-10">
              <p 
-              className="font-medium leading-[1.35] max-w-[880px] whitespace-pre-line"
+              className="font-medium leading-[1.3] max-w-[850px] whitespace-pre-line"
               style={{ fontSize }}
              >
                {quoteText}
              </p>
            </div>
 
-           {/* Bottom Ornament */}
-           <div className="opacity-80">
-             <Quote size={56} className="text-[#1F1F1F]" fill="currentColor" strokeWidth={0} />
+           {/* Bottom Quote Icon */}
+           <div className="opacity-90">
+             <Quote size={52} className="text-[#1F1F1F]" fill="currentColor" strokeWidth={0} />
            </div>
            
-           {/* Layered Pill Depth Effect (The "Shadows") */}
-           <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-[78%] h-14 bg-[#1A73E8] -z-10 rounded-[35px]"></div>
-           <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 w-[56%] h-14 bg-[#185ABC] -z-20 rounded-[35px]"></div>
+           {/* LAYERED PILL DEPTH EFFECT */}
+           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[74%] h-14 bg-[#1A73E8] -z-10 rounded-[35px]"></div>
+           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[54%] h-14 bg-[#185ABC] -z-20 rounded-[35px]"></div>
         </div>
       </div>
 
-      {/* --- BRAND FOOTER --- */}
-      <footer className="w-full bg-white h-48 mt-auto flex items-center justify-between px-20 border-t border-[#E8EAED] shadow-[0_-8px_32px_rgba(0,0,0,0.02)]">
-        {/* Logo and Chapter */}
+      {/* 4. BRANDED FOOTER SECTION */}
+      <div className="w-full bg-white h-44 mt-auto flex items-center justify-between px-20 border-t border-slate-100">
+        {/* Left Footer: Branding */}
         <div className="flex items-center gap-6">
-          <BracketsLogo className="w-20 h-20" />
-          <div className="flex flex-col justify-center">
-            <span className="text-[36px] font-bold text-[#202124] tracking-tight leading-none mb-1.5">
-              Google Developer Groups
-            </span>
-            <span className="text-[22px] font-bold text-[#4285F4] tracking-tight leading-none">
-              {chapterNameText}
-            </span>
+          <BracketsLogo className="w-22 h-22" />
+          <div className="flex flex-col">
+            <span className="text-[36px] font-bold text-[#1F1F1F] tracking-tight leading-none mb-1">Google Developer Groups</span>
+            <span className="text-[22px] font-bold text-[#4285F4] tracking-tight leading-none">{chapterName}</span>
           </div>
         </div>
 
-        {/* Social Presence */}
-        <div className="flex items-center gap-16">
+        {/* Right Footer: Socials and Globe */}
+        <div className="flex items-center gap-14">
           <div className="flex items-center gap-5">
-            <div className="flex items-center gap-4 text-[#202124]">
-              <div className="flex items-center justify-center p-2 rounded-full border-[3px] border-[#202124]">
-                <Instagram size={30} strokeWidth={2.5} />
-              </div>
-              <div className="flex items-center justify-center p-2 rounded-full border-[3px] border-[#202124]">
-                <Twitter size={30} fill="currentColor" strokeWidth={0} />
-              </div>
-              <div className="flex items-center justify-center p-2 rounded-full border-[3px] border-[#202124]">
-                <Linkedin size={30} fill="currentColor" strokeWidth={0} />
-              </div>
+            <div className="flex items-center gap-3.5 text-[#1F1F1F]">
+              <Instagram size={34} strokeWidth={2.5} />
+              <Twitter size={34} fill="currentColor" strokeWidth={0} />
+              <Linkedin size={34} fill="currentColor" strokeWidth={0} />
             </div>
-            <span className="text-[30px] font-bold text-[#202124] tracking-tight ml-2">
+            <span className="text-[28px] font-bold text-[#1F1F1F] ml-1 tracking-tight">
               {socialHandle}
             </span>
           </div>
           
-          <div className="text-[#202124] opacity-90 ml-2">
-            <Globe size={60} strokeWidth={1.2} />
+          <div className="text-[#1F1F1F] opacity-90 ml-2">
+            <Globe size={56} strokeWidth={1.2} />
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
